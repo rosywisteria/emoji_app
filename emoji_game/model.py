@@ -39,8 +39,8 @@ def compute_similarity(emoji_seq, guess):
     
     return np.clip((np.dot(emoji_emb, guess_emb) + 1) / 2, 0.0, 1.0) #rescale to [0,1], use clip for preventing NaN etc
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-csv = pd.read_csv("emoji_puzzles.csv")
-train=[]
+# csv = pd.read_csv("emoji_puzzles.csv")
+# train=[]
 
 # pretrained sentence transformer model
 # model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -50,83 +50,83 @@ train=[]
 model = SentenceTransformer('emoji_siamese_model_v3_finetuned')
 
 
-for _, row in csv.iterrows():
-    emoji_text = emoji_to_word(row['emojis'])
-    answer= row['answer']
+# for _, row in csv.iterrows():
+#     emoji_text = emoji_to_word(row['emojis'])
+#     answer= row['answer']
 
-    train.append(InputExample(texts=[emoji_text, answer], label=1.0))
+#     train.append(InputExample(texts=[emoji_text, answer], label=1.0))
 
-    answers = [a for a in csv["answer"].tolist() if a != answer]
-    negative_words = random.sample(answers, 10) #5 random negative words to counter correct data
-    negative_words = random.sample([w for w in english_words if w.lower() != answer.lower()], 10)
-    for n in negative_words:
-        train.append(InputExample(texts=[emoji_text, n], label=0.0))
+#     answers = [a for a in csv["answer"].tolist() if a != answer]
+#     negative_words = random.sample(answers, 10) #5 random negative words to counter correct data
+#     negative_words = random.sample([w for w in english_words if w.lower() != answer.lower()], 10)
+#     for n in negative_words:
+#         train.append(InputExample(texts=[emoji_text, n], label=0.0))
     
-# # DataLoader
-train_dataloader = DataLoader(train, shuffle=True, batch_size=16)
-train_loss = ContrastiveLoss(model)
+# # # DataLoader
+# train_dataloader = DataLoader(train, shuffle=True, batch_size=16)
+# train_loss = ContrastiveLoss(model)
 
-model.fit(
-    train_objectives=[(train_dataloader, train_loss)],
-    epochs=5,          # increase to 2-3 if you have time
-    warmup_steps=10,
-    show_progress_bar=True
-)
+# model.fit(
+#     train_objectives=[(train_dataloader, train_loss)],
+#     epochs=5,          # increase to 2-3 if you have time
+#     warmup_steps=10,
+#     show_progress_bar=True
+# )
 
 # Save the fine-tuned model
-model.save("emoji_siamese_model_v3_finetuned")
+# model.save("emoji_siamese_model_v3_finetuned")
 
 # -----------------------------
 # 8. Test the trained model
 # -----------------------------
-data = [
-    ("⚡🧙‍♂️","Harry Potter"),
-    ("👨‍🍳🤌","Chef"),
-    ("🍎📱","iPhone"),
-    ("🦁👑🎥","Lion King"),
-    ("🎃👻","Halloween"),
-    ("🎄🎁","Christmas"),
-    ("💍👰","wedding"),
-    ("🎓🎉","graduation"),
-    ("🎮🖥️","gaming"),
-    ("🐰👮‍♀️🦊🌆🥕🫐","Zootopia"),
-    ("🟡👖😎🍌🌕","Minions"),
-    ("🦖🌋🏞️","Jurassic Park"),
-    ("🚢❄️💔🎶🎥","Titanic"),
-    ("👩‍🚀🚀🌌🎬","Interstellar"),
-    ("👸❄️👑⛄🎶","Frozen"),
-    ("🐉🔥⚔️👑","Game of Thrones"),
-    ("🦸‍♂️🦸‍♀️⚡💥📺","The Boys"),
-    ("🎤🕺✨👑","Michael Jackson"),
-    ("🦸‍♂️🕷️🕸️🏙️","Spider-Man"),
-    ("🧙‍♂️💍🏔️","Lord of the Rings"),
-    ("🏎️🔥🏁","F1"),
-    ("🎤🎸👨‍🎤","Elvis Presley"),
-    ("🛳️❄️💔","Titanic"),
-    ("👨‍🚒🔥🏠","Firefighter"),
-    ("🐼🥋","Kung Fu Panda"),
-    ("🦇🕷️🦸‍♂️","Batman"),
-    ("🧞‍♀️🕌🧞‍♂️","Aladdin")
-]
+# data = [
+#     ("⚡🧙‍♂️","Harry Potter"),
+#     ("👨‍🍳🤌","Chef"),
+#     ("🍎📱","iPhone"),
+#     ("🦁👑🎥","Lion King"),
+#     ("🎃👻","Halloween"),
+#     ("🎄🎁","Christmas"),
+#     ("💍👰","wedding"),
+#     ("🎓🎉","graduation"),
+#     ("🎮🖥️","gaming"),
+#     ("🐰👮‍♀️🦊🌆🥕🫐","Zootopia"),
+#     ("🟡👖😎🍌🌕","Minions"),
+#     ("🦖🌋🏞️","Jurassic Park"),
+#     ("🚢❄️💔🎶🎥","Titanic"),
+#     ("👩‍🚀🚀🌌🎬","Interstellar"),
+#     ("👸❄️👑⛄🎶","Frozen"),
+#     ("🐉🔥⚔️👑","Game of Thrones"),
+#     ("🦸‍♂️🦸‍♀️⚡💥📺","The Boys"),
+#     ("🎤🕺✨👑","Michael Jackson"),
+#     ("🦸‍♂️🕷️🕸️🏙️","Spider-Man"),
+#     ("🧙‍♂️💍🏔️","Lord of the Rings"),
+#     ("🏎️🔥🏁","F1"),
+#     ("🎤🎸👨‍🎤","Elvis Presley"),
+#     ("🛳️❄️💔","Titanic"),
+#     ("👨‍🚒🔥🏠","Firefighter"),
+#     ("🐼🥋","Kung Fu Panda"),
+#     ("🦇🕷️🦸‍♂️","Batman"),
+#     ("🧞‍♀️🕌🧞‍♂️","Aladdin")
+# ]
 
 
-# random guesses
-guesses = ["Harry Potter","Hogwarts","Chef","Pizza","iPhone","Android",
-           "Lion King","Frozen","Game of Thrones","The Boys","F1","Elvis Presley",
-           "Titanic","Firefighter","Kung Fu Panda","Batman","Aladdin","Panda","car","man",
-           "wonder woman", "the girls", "ship","heart","cat","dog","clothes","floor"]
+# # random guesses
+# guesses = ["Harry Potter","Hogwarts","Chef","Pizza","iPhone","Android",
+#            "Lion King","Frozen","Game of Thrones","The Boys","F1","Elvis Presley",
+#            "Titanic","Firefighter","Kung Fu Panda","Batman","Aladdin","Panda","car","man",
+#            "wonder woman", "the girls", "ship","heart","cat","dog","clothes","floor"]
 
-# Iterate through the emoji sequences
-for emoji_seq, actual_answer in data:
-    print(f"\nEmoji sequence: {emoji_seq}")
-    print(f"Actual answer: {actual_answer}")
+# # Iterate through the emoji sequences
+# for emoji_seq, actual_answer in data:
+#     print(f"\nEmoji sequence: {emoji_seq}")
+#     print(f"Actual answer: {actual_answer}")
 
-    # Compute similarity for each guess individually
-    scores = {guess: compute_similarity(emoji_seq, guess) for guess in guesses}
+#     # Compute similarity for each guess individually
+#     scores = {guess: compute_similarity(emoji_seq, guess) for guess in guesses}
 
-    # Sort guesses by similarity (high → low)
-    sorted_scores = dict(sorted(scores.items(), key=lambda item: item[1], reverse=True))
+#     # Sort guesses by similarity (high → low)
+#     sorted_scores = dict(sorted(scores.items(), key=lambda item: item[1], reverse=True))
 
-    print("Similarity scores (0–1):")
-    for g, s in sorted_scores.items():
-        print(f"{g}: {s:.3f}")
+#     print("Similarity scores (0–1):")
+#     for g, s in sorted_scores.items():
+#         print(f"{g}: {s:.3f}")
