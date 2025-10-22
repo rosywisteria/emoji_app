@@ -1,1 +1,2 @@
 - A game where players guess the word or phrase represented by a sequence of emojis. Feedback is given through similarity, which describes in words how close you are to the guess, and proximity, which is the percentage score showing how close the guess is to the actual answer.
+<img width="402" height="871" alt="Screenshot 2025-10-22 at 2 07 17 PM" src="https://github.com/user-attachments/assets/9ebc1c06-482e-482f-9513-09db8c99a0c9" />
